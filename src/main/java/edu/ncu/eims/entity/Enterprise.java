@@ -1,5 +1,6 @@
 package edu.ncu.eims.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -88,11 +89,13 @@ public class Enterprise {
      */
     @Column(name = "create_time")
     @CreationTimestamp
+    @JsonIgnore
     private Date createTime;
     /**
      * 更新时间
      */
     @Column(name = "update_time")
     @UpdateTimestamp
+    @JsonIgnore
     private Date updateTime;
 }
