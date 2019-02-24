@@ -2,9 +2,9 @@ package edu.ncu.eims.controller;
 
 import edu.ncu.eims.entity.Enterprise;
 import edu.ncu.eims.service.EnterpriseService;
+import edu.ncu.eims.util.ResponseData;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -26,8 +26,9 @@ public class EnterpriseController {
     private EnterpriseService enterpriseService;
 
     @GetMapping
-    public Page<Enterprise> query(@RequestParam Integer page, @RequestParam Integer size){
-        Pageable pageable = PageRequest.of(page, size, Sort.Direction.ASC, "enterpriseId");
-        return enterpriseService.queryPage(pageable);
+    public ResponseData<Enterprise> query(@RequestParam Integer page,
+                                          @RequestParam Integer size){
+        Pageable pageable = PageRequest.of(page-1, size, Sort.Direction.ASC, "enterpriseId");
+        return ResponseData.of(enterpriseService.queryPage(pageable));
     }
 }
