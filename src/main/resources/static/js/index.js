@@ -53,8 +53,9 @@ $(function () {
                 }
                 ,where: {
                     name:name,
-                    scale:scale
-
+                    scale:scale,
+                    category:category,
+                    chain:chain
                 }
 
             });
