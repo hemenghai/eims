@@ -2,10 +2,10 @@ $(function () {
     //表格ss
     layui.use('table', function(){
         var table = layui.table;
+
         table.render({
-            elem: '#enterpriseTable'
-            //,url:url
-            ,url: './enterprise'
+            elem: '#enterpriseTable',
+            url: './enterprise'
             ,cols: [[
                 {field:'enterpriseName', title: '企业名称',width:230}
                 ,{field:'enterpriseNumber', title: '企业代码',width:200}
@@ -26,28 +26,39 @@ $(function () {
                 ,limitName: 'size' //每页数据量的参数名，默认：limit
             }
         });
+        var $ = layui.$, active = {
+            reload: function(){
+                var name = $("#name").val();
+                var scale = $ ("#scale").val();
+                var category = $("#category").val();
+                var chain = $("#chain").val();
+
+                //执行重载
+                table.reload('testReload', {
+                    url: './enterprise',
+                    page: {
+                        curr: 1 //重新从第 1 页开始
+                    }
+                    ,where: {
+                        name:name,
+                        scale:scale,
+                        category:category,
+                        chain:chain
+                    }
+                });
+            }
+        };
+
         //数据查询
         $("#query").click(function () {
-            var name = $("#name").val();
-            var scale = $ ("#scale").val();
-            var category = $("#category").val();
-            var chain = $("#chain").val();
-            var myTable = $("#enterpriseTable");
-            var reloadEle = $('#enterpriseTable');
-            table.reload('testReload', {
-                url: './enterprise'
-                ,page: {
-                    curr: 1 //重新从第 1 页开始
-                }
-                ,where: {
-                    name:"kkk",
-                    scale:scale,
-                    category:category,
-                    chain:chain
-                }
-
-            });
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
         });
+        $("#clean").click(function () {
+            $("#infoForm").find('input').val("");
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        })
 
     });
 
