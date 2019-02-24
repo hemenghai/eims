@@ -1,5 +1,5 @@
 $(function () {
-    //表格
+    //表格ss
     layui.use('table', function(){
         var table = layui.table;
         table.render({
