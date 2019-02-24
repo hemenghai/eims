@@ -1,0 +1,33 @@
+{
+  "code":"0",
+  "msg":"test",
+  "count":2,
+  "data":[
+      {
+      "enterpriseName":"re",
+      "enterpriseNumber":"dsds",
+      "enterpriseScale":"dd",
+      "legalPerson":"dd",
+      "establishmentTime":"dd",
+      "contactNumber":"dd",
+      "industryCategory":"gf",
+      "industryName":"e",
+      "industryChain":"fd",
+      "mainBusiness1":"ggd",
+      "mainBusiness2":"dd"
+    },
+    {
+      "enterpriseName":"dd",
+      "enterpriseNumber":"dfd",
+      "enterpriseScale":"df",
+      "legalPerson":"fd",
+      "establishmentTime":"fdfd",
+      "contactNumber":"fdfd",
+      "industryCategory":"h",
+      "industryName":"erre",
+      "industryChain":"re",
+      "mainBusiness1":"fd",
+      "mainBusiness2":"fd"
+    }
+  ]
+}
