@@ -24,6 +24,8 @@ $(function () {
             ,request: {
                 pageName: 'page' //页码的参数名称，默认：page
                 ,limitName: 'size' //每页数据量的参数名，默认：limit
+            },done: function(res,curr,count){
+                this.where={};
             }
         });
         var $ = layui.$, active = {
@@ -44,6 +46,8 @@ $(function () {
                         scale:scale,
                         category:category,
                         chain:chain
+                    },done: function(res,curr,count){
+                        this.where={};
                     }
                 });
             }
