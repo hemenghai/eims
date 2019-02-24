@@ -26,19 +26,6 @@ $(function () {
                 ,limitName: 'size' //每页数据量的参数名，默认：limit
             }
         });
-        var $ = layui.$, active = {
-            reload: function(){
-                //执行重载
-                table.reload('testReload', {
-                    page: {
-                        curr: 1 //重新从第 1 页开始
-                    }
-                    ,where: reloadEle.val().field
-
-                });
-            }
-        };
-
         //数据查询
         $("#query").click(function () {
             var name = $("#name").val();
