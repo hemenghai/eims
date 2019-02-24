@@ -7,15 +7,15 @@ $(function () {
             //,url:url
             ,url: './enterprise'
             ,cols: [[
-                {field:'enterpriseName', title: '企业名称'}
-                ,{field:'enterpriseNumber', title: '企业代码'}
-                ,{field:'enterpriseScale', title: '企业规模'}
-                ,{field:'legalPerson', title: '法人'}
-                ,{field:'establishmentTime', title: '成立时间'}
-                ,{field:'contactNumber', title: '联系号码'}
-                ,{field:'industryCategory', title: '行业类别'}
+                {field:'enterpriseName', title: '企业名称',width:230}
+                ,{field:'enterpriseNumber', title: '企业代码',width:200}
+                ,{field:'enterpriseScale', title: '企业规模',width:90}
+                ,{field:'legalPerson', title: '法人',width:80}
+                ,{field:'establishmentTime', title: '成立时间',width:110}
+                ,{field:'contactNumber', title: '联系号码',width:120}
+                ,{field:'industryCategory', title: '行业类别',width:100}
                 ,{field:'industryName', title: '行业名称'}
-                ,{field:'industryChain', title: '所属产业链'}
+                ,{field:'industryChain', title: '所属产业链',width:100}
                 ,{field:'mainBusiness1', title: '主营业务1'}
                 ,{field:'mainBusiness2', title: '主营业务2'}
             ]]
@@ -35,11 +35,12 @@ $(function () {
             var myTable = $("#enterpriseTable");
             var reloadEle = $('#enterpriseTable');
             table.reload('testReload', {
-                page: {
+                url: './enterprise'
+                ,page: {
                     curr: 1 //重新从第 1 页开始
                 }
                 ,where: {
-                    name:name,
+                    name:"kkk",
                     scale:scale,
                     category:category,
                     chain:chain
