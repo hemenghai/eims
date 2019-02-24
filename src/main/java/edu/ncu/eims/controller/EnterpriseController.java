@@ -27,8 +27,12 @@ public class EnterpriseController {
 
     @GetMapping
     public ResponseData<Enterprise> query(@RequestParam Integer page,
-                                          @RequestParam Integer size){
-        Pageable pageable = PageRequest.of(page-1, size, Sort.Direction.ASC, "enterpriseId");
-        return ResponseData.of(enterpriseService.queryPage(pageable));
+                                          @RequestParam Integer size,
+                                          @RequestParam(required = false) String name,
+                                          @RequestParam(required = false) String scale,
+                                          @RequestParam(required = false) String category,
+                                          @RequestParam(required = false) String chain){
+        Pageable pageable = PageRequest.of(page-1, size, Sort.Direction.ASC, Enterprise.ENTERPRISE_ID);
+        return ResponseData.of(enterpriseService.queryPage(name, scale, category, chain, pageable));
     }
 }

@@ -17,6 +17,18 @@ import java.util.Date;
 @Table(name = "enterprise")
 public class Enterprise {
 
+    public static final String ENTERPRISE_ID = "enterpriseId";
+    public static final String ENTERPRISE_NAME = "enterpriseName";
+    public static final String ENTERPRISE_NUMBER = "enterpriseNumber";
+    public static final String ENTERPRISE_SCALE = "enterpriseScale";
+    public static final String LEGAL_PERSON = "legalPerson";
+    public static final String ESTABLISHMENT_TIME = "establishmentTime";
+    public static final String CONTACT_NUMBER = "contactNumber";
+    public static final String INDUSTRY_CATEGORY = "industryCategory";
+    public static final String INDUSTRY_NAME = "industryName";
+    public static final String INDUSTRY_CHAIN = "industryChain";
+    public static final String MAIN_BUSINESS1 = "mainBusiness1";
+    public static final String MAIN_BUSINESS2 = "mainBusiness2";
     /**
      * 代理主键
      */
