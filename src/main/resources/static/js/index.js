@@ -28,20 +28,17 @@ $(function () {
         });
         var $ = layui.$, active = {
             reload: function(){
-                var reloadEle = $('#enterpriseTable');
                 //执行重载
                 table.reload('testReload', {
                     page: {
                         curr: 1 //重新从第 1 页开始
                     }
-                    ,where: {
-                        key: {
-                            id: reloadEle.val()
-                        }
-                    }
+                    ,where: reloadEle.val().field
+
                 });
             }
         };
+
         //数据查询
         $("#query").click(function () {
             var name = $("#name").val();
@@ -49,12 +46,20 @@ $(function () {
             var category = $("#category").val();
             var chain = $("#chain").val();
             var myTable = $("#enterpriseTable");
-            var type = $(this).data('type');
-            active[type] ? active[type].call(this) : '';
-        });
-        function renderTable(table,url) {
+            var reloadEle = $('#enterpriseTable');
+            table.reload('testReload', {
+                page: {
+                    curr: 1 //重新从第 1 页开始
+                }
+                ,where: {
+                    name:name,
+                    scale:scale
 
-        }
+                }
+
+            });
+        });
+
     });
 
 
