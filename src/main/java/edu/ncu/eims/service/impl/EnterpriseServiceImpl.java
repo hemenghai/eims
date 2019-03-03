@@ -11,6 +11,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.criteria.Predicate;
+import javax.transaction.Transactional;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -48,5 +49,17 @@ public class EnterpriseServiceImpl implements EnterpriseService {
     @Override
     public List<Enterprise> getAll() {
         return repository.findAll();
+    }
+
+    @Override
+    @Transactional(rollbackOn = Exception.class, value = Transactional.TxType.REQUIRED)
+    public void add(Enterprise enterprise) {
+        repository.save(enterprise);
+    }
+
+    @Override
+    @Transactional(rollbackOn = Exception.class, value = Transactional.TxType.REQUIRED)
+    public void addList(List<Enterprise> enterprises) {
+        repository.saveAll(enterprises);
     }
 }

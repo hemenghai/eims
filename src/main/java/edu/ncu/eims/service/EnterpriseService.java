@@ -13,16 +13,25 @@ import java.util.List;
 public interface EnterpriseService {
 
     /**
-     * 分页查询
+     * 多条件分页查询
      *
      * @param name
      * @param scale
      * @param category
      * @param chain
      * @param pageable 页面信息
-     * @return 企业信息页面
+     * @return 一页企业信息
      */
     Page<Enterprise> queryPage(String name, String scale, String category, String chain, Pageable pageable);
 
+    /**
+     * 获取所有
+     * @return 所有企业信息
+     */
     List<Enterprise> getAll();
+
+
+    void add(Enterprise enterprise);
+
+    void addList(List<Enterprise> enterprises);
 }

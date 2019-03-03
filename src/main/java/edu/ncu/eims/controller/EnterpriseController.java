@@ -6,9 +6,13 @@ import edu.ncu.eims.util.FileUtils;
 import edu.ncu.eims.util.ResponseData;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.poifs.filesystem.POIFSFileSystem;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -24,7 +28,9 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.URLEncoder;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * @author hemenghai
@@ -54,14 +60,47 @@ public class EnterpriseController {
                                           @RequestParam(required = false) String scale,
                                           @RequestParam(required = false) String category,
                                           @RequestParam(required = false) String chain){
-        Pageable pageable = PageRequest.of(page-1, size, Sort.Direction.ASC, Enterprise.ENTERPRISE_ID);
+        Pageable pageable = PageRequest.of(page-1, size, Sort.Direction.ASC, Enterprise.ENTERPRISE_NAME);
         return ResponseData.of(enterpriseService.queryPage(name, scale, category, chain, pageable));
     }
 
     @PostMapping("/import")
     @ApiOperation("导入")
-    public String importFile(@RequestParam("file") MultipartFile file){
-        return "上传失败";
+    public String importFile(@RequestParam("file") MultipartFile file) throws IOException {
+        HSSFWorkbook workbook = new HSSFWorkbook(new POIFSFileSystem(file.getInputStream()));
+        HSSFSheet sheet = workbook.getSheetAt(0);
+
+        HSSFRow row;
+        HSSFCell cell;
+
+        List<Enterprise> enterprises = new LinkedList<>();
+        for (int i = 1; i <= sheet.getLastRowNum(); i++) {
+            row = sheet.getRow(i);
+            Enterprise enterprise = new Enterprise();
+
+            enterprise.setEnterpriseId(UUID.randomUUID().toString());
+            enterprise.setEnterpriseName(row.getCell(0).getStringCellValue());
+            cell = row.getCell(1);
+            cell.setCellType(CellType.STRING);
+            enterprise.setEnterpriseNumber(cell.getStringCellValue());
+            enterprise.setEnterpriseScale(row.getCell(2).getStringCellValue());
+            enterprise.setLegalPerson(row.getCell(3).getStringCellValue());
+            cell = row.getCell(4);
+            cell.setCellType(CellType.STRING);
+            enterprise.setEstablishmentTime(cell.getStringCellValue());
+            cell = row.getCell(5);
+            cell.setCellType(CellType.STRING);
+            enterprise.setContactNumber(cell.getStringCellValue());
+            enterprise.setIndustryCategory(row.getCell(6).getStringCellValue());
+            enterprise.setIndustryName(row.getCell(7).getStringCellValue());
+            enterprise.setIndustryChain(row.getCell(8).getStringCellValue());
+            enterprise.setMainBusiness1(row.getCell(9).getStringCellValue());
+            enterprise.setMainBusiness2(row.getCell(10).getStringCellValue());
+
+            enterprises.add(enterprise);
+        }
+        enterpriseService.addList(enterprises);
+        return "上传成功";
     }
 
     @GetMapping("/export")
@@ -88,7 +127,7 @@ public class EnterpriseController {
             row.createCell(1).setCellValue(enterprise.getEnterpriseNumber());
             row.createCell(2).setCellValue(enterprise.getEnterpriseScale());
             row.createCell(3).setCellValue(enterprise.getLegalPerson());
-            row.createCell(4).setCellValue(enterprise.getCreateTime());
+            row.createCell(4).setCellValue(enterprise.getEstablishmentTime());
             row.createCell(5).setCellValue(enterprise.getContactNumber());
             row.createCell(6).setCellValue(enterprise.getIndustryCategory());
             row.createCell(7).setCellValue(enterprise.getIndustryName());

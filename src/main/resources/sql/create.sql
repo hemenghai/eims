@@ -7,7 +7,7 @@ create table enterprise (
   enterprise_scale varchar(128),
 
   legal_person varchar(128) not null,
-  establishment_time date not null,
+  establishment_time varchar(32) not null,
   contact_number varchar(64) not null,
 
   industry_category varchar(64),

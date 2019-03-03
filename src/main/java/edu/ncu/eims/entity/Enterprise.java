@@ -63,8 +63,7 @@ public class Enterprise {
      * 成立时间
      */
     @Column(name = "establishment_time")
-    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
-    private Date establishmentTime;
+    private String establishmentTime;
     /**
      * 联系号码
      */
