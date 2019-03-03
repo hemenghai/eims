@@ -44,4 +44,9 @@ public class EnterpriseServiceImpl implements EnterpriseService {
         };
         return repository.findAll(specification, pageable);
     }
+
+    @Override
+    public List<Enterprise> getAll() {
+        return repository.findAll();
+    }
 }

@@ -4,6 +4,8 @@ import edu.ncu.eims.entity.Enterprise;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
+
 /**
  * @author hemenghai
  * @date 2019-02-23
@@ -21,4 +23,6 @@ public interface EnterpriseService {
      * @return 企业信息页面
      */
     Page<Enterprise> queryPage(String name, String scale, String category, String chain, Pageable pageable);
+
+    List<Enterprise> getAll();
 }
