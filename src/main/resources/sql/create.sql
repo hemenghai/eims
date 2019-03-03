@@ -3,12 +3,12 @@ drop table enterprise;
 create table enterprise (
   enterprise_id varchar(128) primary key,
   enterprise_name varchar(128) unique not null,
-  enterprise_number varchar(128) unique not null,
+  enterprise_number varchar(128),
   enterprise_scale varchar(128),
 
-  legal_person varchar(128) not null,
-  establishment_time varchar(32) not null,
-  contact_number varchar(64) not null,
+  legal_person varchar(128),
+  establishment_time varchar(32),
+  contact_number varchar(64),
 
   industry_category varchar(64),
   industry_name varchar(64),
