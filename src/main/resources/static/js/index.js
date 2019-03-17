@@ -1,61 +1,7 @@
 $(function () {
-
-    $("#saveData").click(function(data){
-        var id = $("#id").val();
-        var enterpriseName = $("#enterpriseName").val();
-        var enterpriseNumber = $("#enterpriseNumber").val();
-        var enterpriseScale = $("#enterpriseScale").val();
-        var legalPerson = $("#legalPerson").val();
-        var establishmentTime = $("#establishmentTime").val();
-        var contactNumber = $("#contactNumber").val();
-        var industryCategory = $("#industryCategory").val();
-        var industryName = $("#industryName").val();
-        var industryChain = $("#industryChain").val();
-        var mainBusiness1 = $("#mainBusiness1").val();
-        var mainBusiness2 = $("#mainBusiness2").val();
-        var data = {
-            enterpriseName:enterpriseName,
-            enterpriseNumber:enterpriseNumber,
-            enterpriseScale:enterpriseScale,
-            legalPerson:legalPerson,
-            establishmentTime:establishmentTime,
-            contactNumber:contactNumber,
-            industryCategory:industryCategory,
-            industryName:industryName,
-            industryChain:industryChain,
-            mainBusiness1:mainBusiness1,
-            mainBusiness2:mainBusiness2
-        };
-        var method = '';
-        if (id === null || id === "" || id === undefined){
-            method = 'post';
-        }else {
-            method = 'put';
-            data.id = id;
-        }
-        $.ajax({
-            type:method,
-            url:"./enterprise",
-            contentType:'application/json',
-            data:data,
-            dataType:"json",
-            success:function (data) {
-                layer.msg("保存成功")
-            },error:function (error) {
-
-            }
-        });
-        return false;
-    });
-    layui.use('laydate', function() {
-        var laydate = layui.laydate;
-        //常规用法
-        laydate.render({
-            elem: '#establishmentTime'
-        });
-    });
     //表格ss
-    layui.use('table', function() {
+    layui.use(['table','layer'], function() {
+        var layer = layui.layer;
         var table = layui.table;
         table.render({
             elem: '#enterpriseTable',
@@ -93,7 +39,7 @@ $(function () {
                 var chain = $("#chain").val();
                 //执行重载
                 table.reload('testReload', {
-                    url: './enterprise',
+                    url: './enterprise/query',
                     page: {
                         curr: 1 //重新从第 1 页开始
                     }
@@ -108,7 +54,62 @@ $(function () {
                 });
             }
         };
-
+        //保存（新增/修改）
+        $("#saveData").click(function(data){
+            var id = $("#id").val();
+            var enterpriseName = $("#enterpriseName").val();
+            var enterpriseNumber = $("#enterpriseNumber").val();
+            var enterpriseScale = $("#enterpriseScale").val();
+            var legalPerson = $("#legalPerson").val();
+            var establishmentTime = $("#establishmentTime").val();
+            var contactNumber = $("#contactNumber").val();
+            var industryCategory = $("#industryCategory").val();
+            var industryName = $("#industryName").val();
+            var industryChain = $("#industryChain").val();
+            var mainBusiness1 = $("#mainBusiness1").val();
+            var mainBusiness2 = $("#mainBusiness2").val();
+            var data = {
+                enterpriseName:enterpriseName,
+                enterpriseNumber:enterpriseNumber,
+                enterpriseScale:enterpriseScale,
+                legalPerson:legalPerson,
+                establishmentTime:establishmentTime,
+                contactNumber:contactNumber,
+                industryCategory:industryCategory,
+                industryName:industryName,
+                industryChain:industryChain,
+                mainBusiness1:mainBusiness1,
+                mainBusiness2:mainBusiness2
+            };
+            var method = '';
+            if (id === null || id === "" || id === undefined){
+                method = 'POST';
+            }else {
+                method = 'PUT';
+                data.enterpriseId = id;
+            }
+            $.ajax({
+                type:method,
+                url:"./enterprise",
+                contentType:'application/json',
+                data:JSON.stringify(data),
+                dataType:"json",
+                success:function (data) {
+                    layer.msg("保存成功");
+                    active["reload"] ? active["reload"].call(this) : '';
+                },error:function (error) {
+                    layer.msg("保存失败");
+                }
+            });
+            return false;
+        });
+        layui.use('laydate', function() {
+            var laydate = layui.laydate;
+            //常规用法
+            laydate.render({
+                elem: '#establishmentTime'
+            });
+        });
         //新增
         $("#addBtn").click(function () {
             layer.open({
@@ -132,17 +133,18 @@ $(function () {
             if (obj.event === 'del') {
                 layer.confirm('真的删除行么', function (index) {
                     $.ajax({
-                        type: 'delete',
+                        type: 'DELETE',
                         url: "./enterprise",
                         contentType: 'application/json',
                         data: JSON.stringify(id),
                         success: function (data) {
-                            layer.msg("删除成功")
+                            layer.msg("删除成功");
+                            active["reload"] ? active["reload"].call(this) : '';
                         }, error: function (error) {
                             layer.msg("删除失败")
                         }
                     });
-                    obj.del();
+                    //obj.del();
                     layer.close(index);
                 });
             } else if (obj.event === 'edit') {
@@ -153,7 +155,7 @@ $(function () {
                     area: ["60%", "400px"],
                     btn: ["保存", "取消"],
                     success: function () {
-                        $("#id").val(data.id);
+                        $("#id").val(data.enterpriseId);
                         $("#enterpriseName").val(data.enterpriseName);
                         $("#enterpriseNumber").val(data.enterpriseNumber);
                         $("#enterpriseScale").val(data.enterpriseScale);
@@ -168,13 +170,35 @@ $(function () {
                     },
                     yes: function (index, layero) {
                         $("#saveData").click();
-                        layero.close(index);
-                    }, btn2: function (index, layero) {
+                        layer.close(index);
+                    }, btn2: function (index1, layero) {
                         $("#resetData").click();
-                        layero.close(index);
+                        layer.close(index1);
                     }
                 });
             }
+        });
+        //批量删除
+        $("#deleteBatch").click(function () {
+            var checkStatus = table.checkStatus('enterpriseTable')
+                ,data = checkStatus.data;
+
+            layer.confirm('真的删除行么', function (index) {
+                $.ajax({
+                    type: 'DELETE',
+                    url: "./enterprise",
+                    contentType: 'application/json',
+                    data: JSON.stringify(id),
+                    success: function (data) {
+                        layer.msg("删除成功");
+                        active["reload"] ? active["reload"].call(this) : '';
+                    }, error: function (error) {
+                        layer.msg("删除失败")
+                    }
+                });
+                //obj.del();
+                layer.close(index);
+            });
         });
         //数据查询
         $("#query").click(function () {
