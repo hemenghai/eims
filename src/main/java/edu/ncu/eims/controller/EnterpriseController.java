@@ -76,21 +76,21 @@ public class EnterpriseController {
     @ApiOperation("添加")
     public ResponseData<Void> add(@RequestBody AddEnterpriseDto dto){
         enterpriseService.save(dto.toEntity());
-        return new ResponseData<>();
+        return ResponseData.ok();
     }
 
     @PutMapping
     @ApiOperation("更新")
     public ResponseData<Void> update(@RequestBody UpdateEnterpriseDto dto){
         enterpriseService.update(dto.toEntity());
-        return new ResponseData<>();
+        return ResponseData.ok();
     }
 
     @DeleteMapping
     @ApiOperation("删除")
     public ResponseData<Void> delete(@RequestBody String ids){
         enterpriseService.deleteByIds(ids.split(","));
-        return new ResponseData<>();
+        return ResponseData.ok();
     }
 
     @PostMapping("/import")
@@ -129,7 +129,7 @@ public class EnterpriseController {
             enterprises.add(enterprise);
         }
         enterpriseService.saveAll(enterprises);
-        return new ResponseData<>();
+        return ResponseData.ok();
     }
 
     @GetMapping("/export")

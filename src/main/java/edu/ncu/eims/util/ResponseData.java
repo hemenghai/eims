@@ -14,8 +14,15 @@ public class ResponseData<T> {
 
     private T data;
 
+    public static ResponseData<Void> ok(){
+        ResponseData<Void> response = new ResponseData<>();
+        response.setCode(0);
+        response.setMsg("success");
+        return response;
+    }
+
     public static <T> ResponseData<T> ok(T data){
-        ResponseData response = new ResponseData();
+        ResponseData<T> response = new ResponseData<>();
         response.setCode(0);
         response.setMsg("success");
         response.setData(data);
