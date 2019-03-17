@@ -19,3 +19,7 @@
 .query-condition>div{
     margin-left: 65px;
 }
+#enterpriseInfoForm .layui-col-md5{
+    margin-left: 10px;
+    margin-top: 10px;
+}

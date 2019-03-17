@@ -42,17 +42,110 @@
                     <button class="layui-btn layui-btn-warm" id="query" type="button" data-type="reload">查询</button>
                     <button class="layui-btn layui-btn-danger" id="clean" type="button" data-type="reload">清空</button>
                 </div>
-
             </form>
         </div>
         <div class="layui-card-body" >
-            <table class="layui-hide" id="enterpriseTable"></table>
+            <div class="">
+                <button type="button" class="layui-btn layui-btn-sm" id="import" >导入</button>
+                <button class="layui-btn layui-btn-danger layui-btn-sm" id="export" type="button" style="margin-left: 10px">导出</button>
+                <button class="layui-btn layui-btn-warm layui-btn-sm" id="download" type="button">下载模板</button>
+
+                <button type="button" class="layui-btn layui-btn-normal layui-btn-sm" id="addBtn" style="position: absolute;right: 115px;"><i class="layui-icon">&#xe608;</i>新增</button>
+                <button type="button" class="layui-btn layui-btn-sm" id="deleteBatch" style="position: absolute;right: 15px;"><i class="layui-icon">&#xe640;</i>批量删除</button>
+            </div>
+            <table class="layui-hide" id="enterpriseTable" lay-filter="enterpriseTable"></table>
         </div>
     </div>
 </div>
+<div style="display: none;margin-top: 10px" id="enterpriseInfoForm">
+    <form class="layui-form" action="" >
+        <div class="layui-col-md5 " style="display: none">
+            <label class="layui-form-label">ID</label>
+            <div class="layui-input-block">
+                <input type="text" name="id" lay-verify="title" id="id" autocomplete="off" placeholder="ID" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-col-md5 ">
+            <label class="layui-form-label">企业名称</label>
+            <div class="layui-input-block">
+                <input type="text" name="enterpriseName" lay-verify="title" id="enterpriseName" autocomplete="off" placeholder="企业名称" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-col-md5 ">
+            <label class="layui-form-label">企业代码</label>
+            <div class="layui-input-block">
+                <input type="text" name="enterpriseNumber" lay-verify="title" id="enterpriseNumber" autocomplete="off" placeholder="企业代码" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-col-md5 ">
+            <label class="layui-form-label">企业规模</label>
+            <div class="layui-input-block">
+                <input type="text" name="enterpriseScale" lay-verify="title" id="enterpriseScale" autocomplete="off" placeholder="企业规模" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-col-md5 ">
+            <label class="layui-form-label">法人</label>
+            <div class="layui-input-block">
+                <input type="text" name="legalPerson" lay-verify="title" id="legalPerson" autocomplete="off" placeholder="法人" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-col-md5 ">
+            <label class="layui-form-label">成立时间</label>
+            <div class="layui-input-block">
+                <input type="text" name="establishmentTime" lay-verify="title" id="establishmentTime" autocomplete="off" placeholder="成立时间" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-col-md5 ">
+            <label class="layui-form-label">联系号码</label>
+            <div class="layui-input-block">
+                <input type="text" name="contactNumber" lay-verify="title" id="contactNumber" autocomplete="off" placeholder="联系号码" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-col-md5 ">
+            <label class="layui-form-label">行业类别</label>
+            <div class="layui-input-block">
+                <input type="text" name="industryCategory" lay-verify="title" id="industryCategory" autocomplete="off" placeholder="行业类别" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-col-md5 ">
+            <label class="layui-form-label">行业名称</label>
+            <div class="layui-input-block">
+                <input type="text" name="industryName" lay-verify="title" id="industryName" autocomplete="off" placeholder="行业名称" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-col-md5 ">
+            <label class="layui-form-label">所属产业链</label>
+            <div class="layui-input-block">
+                <input type="text" name="industryChain" lay-verify="title" id="industryChain" autocomplete="off" placeholder="所属产业链" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-col-md5 ">
+            <label class="layui-form-label">主营业务1</label>
+            <div class="layui-input-block">
+                <input type="text" name="mainBusiness1" lay-verify="title" id="mainBusiness1" autocomplete="off" placeholder="主营业务1" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-col-md5 ">
+            <label class="layui-form-label">主营业务2</label>
+            <div class="layui-input-block">
+                <input type="text" name="mainBusiness2" lay-verify="title" id="mainBusiness2" autocomplete="off" placeholder="主营业务2" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item" style="display: none">
+            <div class="layui-input-block">
+                <button class="layui-btn" lay-submit lay-filter="saveBtn" id="saveData">立即提交</button>
+                <button type="reset" class="layui-btn layui-btn-primary" id="resetData">重置</button>
+            </div>
+        </div>
+    </form>
+</div>
 </body>
-<script src="./layui/layui.js"></script>
-<script src="./layui/lay/modules/table.js"></script>
-<script src="./layui/jquery-2.0.3.min.js"></script>
-<script src="./js/index.js"></script>
+<script type="text/javascript" src="./layui/layui.js"></script>
+<script type="text/javascript" src="./layui/lay/modules/table.js"></script>
+<script type="text/javascript" src="./layui/jquery-2.0.3.min.js"></script>
+<script type="text/javascript" src="./js/index.js"></script>
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
 </html>
