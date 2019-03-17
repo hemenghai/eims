@@ -1,9 +1,12 @@
 package edu.ncu.eims.controller;
 
+import edu.ncu.eims.dto.request.AddEnterpriseDto;
+import edu.ncu.eims.dto.request.UpdateEnterpriseDto;
 import edu.ncu.eims.entity.Enterprise;
 import edu.ncu.eims.service.EnterpriseService;
 import edu.ncu.eims.util.FileUtils;
 import edu.ncu.eims.util.ResponseData;
+import edu.ncu.eims.util.ResponseListData;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.poi.hssf.usermodel.HSSFCell;
@@ -11,7 +14,6 @@ import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
-import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -52,21 +54,48 @@ public class EnterpriseController {
     @Autowired
     private EnterpriseService enterpriseService;
 
-    @GetMapping
+    @GetMapping("/query")
     @ApiOperation("分页查询")
-    public ResponseData<Enterprise> query(@RequestParam Integer page,
-                                          @RequestParam Integer size,
-                                          @RequestParam(required = false) String name,
-                                          @RequestParam(required = false) String scale,
-                                          @RequestParam(required = false) String category,
-                                          @RequestParam(required = false) String chain){
+    public ResponseListData<Enterprise> query(@RequestParam Integer page,
+                                              @RequestParam Integer size,
+                                              @RequestParam(required = false) String name,
+                                              @RequestParam(required = false) String scale,
+                                              @RequestParam(required = false) String category,
+                                              @RequestParam(required = false) String chain){
         Pageable pageable = PageRequest.of(page-1, size, Sort.Direction.ASC, Enterprise.ENTERPRISE_NAME);
-        return ResponseData.of(enterpriseService.queryPage(name, scale, category, chain, pageable));
+        return ResponseListData.of(enterpriseService.queryPage(name, scale, category, chain, pageable));
+    }
+
+    @GetMapping("/details/{id}")
+    @ApiOperation("查询详情")
+    public ResponseData<Enterprise> get(@PathVariable("id") String id){
+        return ResponseData.ok(enterpriseService.get(id));
+    }
+
+    @PostMapping
+    @ApiOperation("添加")
+    public ResponseData<Void> add(@RequestBody AddEnterpriseDto dto){
+        enterpriseService.save(dto.toEntity());
+        return new ResponseData<>();
+    }
+
+    @PutMapping
+    @ApiOperation("更新")
+    public ResponseData<Void> update(@RequestBody UpdateEnterpriseDto dto){
+        enterpriseService.update(dto.toEntity());
+        return new ResponseData<>();
+    }
+
+    @DeleteMapping
+    @ApiOperation("删除")
+    public ResponseData<Void> delete(@RequestBody String ids){
+        enterpriseService.deleteByIds(ids.split(","));
+        return new ResponseData<>();
     }
 
     @PostMapping("/import")
     @ApiOperation("导入")
-    public String importFile(@RequestParam("file") MultipartFile file) throws IOException {
+    public ResponseData<Void> importFile(@RequestParam("file") MultipartFile file) throws IOException {
         HSSFWorkbook workbook = new HSSFWorkbook(new POIFSFileSystem(file.getInputStream()));
         HSSFSheet sheet = workbook.getSheetAt(0);
 
@@ -99,8 +128,8 @@ public class EnterpriseController {
 
             enterprises.add(enterprise);
         }
-        enterpriseService.addList(enterprises);
-        return "上传成功";
+        enterpriseService.saveAll(enterprises);
+        return new ResponseData<>();
     }
 
     @GetMapping("/export")

@@ -12,8 +12,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.criteria.Predicate;
 import javax.transaction.Transactional;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author hemenghai
@@ -52,14 +51,38 @@ public class EnterpriseServiceImpl implements EnterpriseService {
     }
 
     @Override
+    public Enterprise get(String id) {
+        Optional<Enterprise> optional = repository.findById(id);
+        return optional.orElse(null);
+    }
+
+    @Override
     @Transactional(rollbackOn = Exception.class, value = Transactional.TxType.REQUIRED)
-    public void add(Enterprise enterprise) {
+    public void save(Enterprise enterprise) {
+        enterprise.setEnterpriseId(UUID.randomUUID().toString());
         repository.save(enterprise);
     }
 
     @Override
     @Transactional(rollbackOn = Exception.class, value = Transactional.TxType.REQUIRED)
-    public void addList(List<Enterprise> enterprises) {
+    public void saveAll(List<Enterprise> enterprises) {
         repository.saveAll(enterprises);
     }
+
+    @Override
+    @Transactional(rollbackOn = Exception.class, value = Transactional.TxType.REQUIRED)
+    public void update(Enterprise enterprise) {
+        if(StringUtils.isNotBlank(enterprise.getEnterpriseId()) && repository.existsById(enterprise.getEnterpriseId())) {
+            repository.save(enterprise);
+        }
+    }
+
+    @Override
+    @Transactional(rollbackOn = Exception.class, value = Transactional.TxType.REQUIRED)
+    public void deleteByIds(String[] ids) {
+        for (String id : ids) {
+            repository.deleteById(id);
+        }
+    }
+
 }

@@ -30,8 +30,13 @@ public interface EnterpriseService {
      */
     List<Enterprise> getAll();
 
+    Enterprise get(String id);
 
-    void add(Enterprise enterprise);
+    void save(Enterprise enterprise);
 
-    void addList(List<Enterprise> enterprises);
+    void saveAll(List<Enterprise> enterprises);
+
+    void update(Enterprise enterprise);
+
+    void deleteByIds(String[] ids);
 }
