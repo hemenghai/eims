@@ -7,7 +7,7 @@ $(function () {
             elem: '#enterpriseTable',
             url: './enterprise/query'
             , cols: [[
-                {type: 'checkbox'}
+                {field:'id',type: 'checkbox'}
                 , {title: '序号', type: 'numbers'}
                 , {field: 'enterpriseName', title: '企业名称'}
                 //,{field:'enterpriseNumber', title: '企业代码',width:200}
@@ -53,7 +53,8 @@ $(function () {
                     }
                 });
             }
-        };
+
+    };
         //保存（新增/修改）
         $("#saveData").click(function(data){
             var id = $("#id").val();
@@ -120,7 +121,7 @@ $(function () {
                 btn: ["保存", "取消"],
                 yes: function (index, layero) {
                     $("#saveData").click();
-                    layero.close(index);
+                    layer.close(index);
                 }, btn2: function (index, layero) {
                     $("#resetData").click();
                 }
@@ -129,14 +130,14 @@ $(function () {
         //监听行工具事件
         table.on('tool(enterpriseTable)', function (obj) {
             var data = obj.data;
-            var id = data.id;
+            var id = data.enterpriseId;
             if (obj.event === 'del') {
                 layer.confirm('真的删除行么', function (index) {
                     $.ajax({
                         type: 'DELETE',
                         url: "./enterprise",
                         contentType: 'application/json',
-                        data: JSON.stringify(id),
+                        data: id,
                         success: function (data) {
                             layer.msg("删除成功");
                             active["reload"] ? active["reload"].call(this) : '';
@@ -178,27 +179,43 @@ $(function () {
                 });
             }
         });
+
+        table.on("toolbar(enterpriseTable)",function (resp) {
+            var checkStatus = layui.table.checkStatus(resp.config.id)
+                ,data = checkStatus.data;
+        });
         //批量删除
         $("#deleteBatch").click(function () {
-            var checkStatus = table.checkStatus('enterpriseTable')
-                ,data = checkStatus.data;
-
-            layer.confirm('真的删除行么', function (index) {
-                $.ajax({
-                    type: 'DELETE',
-                    url: "./enterprise",
-                    contentType: 'application/json',
-                    data: JSON.stringify(id),
-                    success: function (data) {
-                        layer.msg("删除成功");
-                        active["reload"] ? active["reload"].call(this) : '';
-                    }, error: function (error) {
-                        layer.msg("删除失败")
+            var checkStatus = table.checkStatus('testReload')
+                ,dataList = checkStatus.data;
+            if (dataList !== null && dataList !== undefined && dataList.length > 0){
+                var ids = "";
+                $.each(dataList,function (index,data) {
+                    if (ids == ""){
+                        ids = data.enterpriseId;
+                    }else {
+                        ids += ","+ data.enterpriseId;
                     }
                 });
-                //obj.del();
-                layer.close(index);
-            });
+                layer.confirm('真的删除行么', function (index) {
+                    $.ajax({
+                        type: 'DELETE',
+                        url: "./enterprise",
+                        contentType: 'application/json',
+                        data: ids,
+                        success: function (data) {
+                            layer.msg("删除成功");
+                            active["reload"] ? active["reload"].call(this) : '';
+                        }, error: function (error) {
+                            layer.msg("删除失败");
+                        }
+                    });
+                    layer.close(index);
+                });
+            }else {
+                layer.msg("请选择要删除的行");
+            }
+
         });
         //数据查询
         $("#query").click(function () {
