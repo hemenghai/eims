@@ -128,8 +128,13 @@ public class EnterpriseController {
 
             enterprises.add(enterprise);
         }
-        enterpriseService.saveAll(enterprises);
-        return ResponseData.ok();
+        try {
+            enterpriseService.saveAll(enterprises);
+            return ResponseData.ok();
+        } catch (Exception e){
+            e.printStackTrace();
+            return ResponseData.error(e);
+        }
     }
 
     @GetMapping("/export")

@@ -28,4 +28,11 @@ public class ResponseData<T> {
         response.setData(data);
         return response;
     }
+
+    public static <T extends Throwable> ResponseData<Void> error(T exception){
+        ResponseData<Void> response = new ResponseData<>();
+        response.setCode(1);
+        response.setMsg(exception.getMessage());
+        return response;
+    }
 }
